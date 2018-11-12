@@ -9,7 +9,7 @@ final dummySnapshot = [
   {"name":"Filip","votes":15},
   {"name":"Filip","votes":15},
   {"name":"Filip","votes":15}
-]
+];
 
 class MyApp extends StatelessWidget {
   @override
@@ -44,12 +44,13 @@ Widget _buildBody(BuildContext context){
 }
 
 Widget _buildList(BuildContext context, List<Map> snapshot){
-  padding: const EdgeInsets.only(top:20.0),
-  children: snapshot.map((data)=> _buildListItem(context,data)).toList()
+  padding: const EdgeInsets.only(top:20.0);
+  children: snapshot.map((data)=> _buildListItem(context,data)).toList();
 }
 
 Widget _buildListItem(BuildContext context, Map data){
   final record = Record.fromMap(data);
+  
   return Padding(
     key: ValueKey(record.name),
     padding: const EdgeInsets.symmetric(horizontal:16.0,vertical:8.0),
@@ -68,5 +69,19 @@ Widget _buildListItem(BuildContext context, Map data){
 }
 
 class Record{
+  final String name;
+  final int votes;
+  final DocumentReference reference;
 
+  Record.fromMap(Map<String, dynamic>map,{this.reference})
+    : assert(map['name'] != null),
+      assert(map['votes'] != null),
+      name = map['name'],
+      votes = map['votes'];
+
+  Record.fromSnapshot(DocumentSnapshot snapshot)
+    : this.fromMap(snapshot.data, reference: snapshot.reference);
+
+  @override
+  String toString() => "Record<$name:$votes>";
 }
